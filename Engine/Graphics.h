@@ -24,6 +24,8 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+//#include "Surface.h"
+#include "RectI.h"
 
 class Graphics
 {
@@ -57,6 +59,19 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	//void DrawSpriteNonChroma(int x, int y, const Surface& s);
+	//void DrawSpriteNonChroma(int x, int y, const RectI& srcRect, const Surface& s);
+	////void DrawSpriteNonChroma(int x, int y, RectI srcRect, const RectI& clipRect, const Surface& s);
+	//void DrawSprite(int x, int y, const Surface& s, Color chroma = Colors::Magenta);
+	//void DrawSprite(int x, int y, const RectI& srcRect, const Surface& s, Color chroma = Colors::Magenta);
+	//void DrawSprite(int x, int y, RectI srcRect, const RectI& clipRect, const Surface& s, Color chroma = Colors::Magenta);
+	void DrawRect(int x0, int y0, int x1, int y1, Color c);
+	void DrawRectDim(int x0, int y0, int width, int height, Color c)
+	{
+		DrawRect(x0, y0, x0 + width, y0 + height, c);
+	}
+	void DrawCircle(int x, int y, int radius, Color c);
+
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
@@ -75,4 +90,5 @@ private:
 public:
 	static constexpr int ScreenWidth = 800;
 	static constexpr int ScreenHeight = 600;
+	static RectI GetScreenRect();
 };

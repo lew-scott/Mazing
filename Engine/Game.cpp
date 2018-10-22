@@ -24,7 +24,8 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	brd(gfx)
 {
 }
 
@@ -38,8 +39,14 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+
+
+
+
 }
 
 void Game::ComposeFrame()
 {
+	brd.DrawBorder();
+	brd.DrawCells(gfx);
 }

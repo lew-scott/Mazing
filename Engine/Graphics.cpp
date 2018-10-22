@@ -252,6 +252,11 @@ Graphics::~Graphics()
 	if( pImmediateContext ) pImmediateContext->ClearState();
 }
 
+RectI Graphics::GetScreenRect()
+{
+	return { 0, ScreenWidth, 0, ScreenHeight };
+}
+
 void Graphics::EndFrame()
 {
 	HRESULT hr;
@@ -316,6 +321,101 @@ void Graphics::PutPixel( int x,int y,Color c )
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
 }
 
+//void Graphics::DrawSpriteNonChroma(int x, int y, const Surface & s)
+//{
+//	DrawSpriteNonChroma(x, y, s.getRect(), s);
+//}
+//
+//void Graphics::DrawSpriteNonChroma(int x, int y, const RectI & srcRect, const Surface & s)
+//{
+//	DrawSpriteNonChroma(x, y, srcRect, GetScreenRect(), s);
+//}
+//
+//void Graphics::DrawSpriteNonChroma(int x, int y, RectI srcRect, const RectI & clipRect, const Surface & s)
+//{
+//	assert(srcRect.left > 0);
+//	assert(srcRect.right <= s.GetWidth());
+//	assert(srcRect.top > 0);
+//	assert(srcRect.bottom <= s.GetHeight());
+//
+//	if (x < clipRect.left)
+//	{
+//		srcRect.left += clipRect.left - x;
+//		x = clipRect.left;
+//	}
+//	if (y < clipRect.top)
+//	{
+//		srcRect.top += clipRect.top - y;
+//		y = clipRect.top;
+//	}
+//	if (x + srcRect.GetWidth() > clipRect.right)
+//	{
+//		srcRect.right -= x + srcRect.GetWidth() - clipRect.right;
+//		
+//	}
+//	if (y + srcRect.GetHeight() > clipRect.bottom)
+//	{
+//		srcRect.bottom -= y + srcRect.GetHeight() - clipRect.bottom;
+//	}
+//
+//	for (int sy = srcRect.top; sy < srcRect.bottom; sy++)
+//	{
+//		for (int sx = srcRect.left; sx < srcRect.right; sx++)
+//		{
+//			PutPixel(x + sx - srcRect.left, y + sy - srcRect.top, s.GetPixel(sx, sy));
+//		}
+//	}
+//}
+//
+//void Graphics::DrawSprite(int x, int y, const Surface & s, Color chroma)
+//{
+//	DrawSprite(x, y, s.getRect(), s, chroma);
+//}
+//
+//void Graphics::DrawSprite(int x, int y, const RectI & srcRect, const Surface & s, Color chroma)
+//{
+//	DrawSprite(x, y, srcRect, GetScreenRect(), s, chroma);
+//}
+//
+//void Graphics::DrawSprite(int x, int y, RectI srcRect, const RectI & clipRect, const Surface & s, Color chroma)
+//{
+//	assert(srcRect.left > 0);
+//	assert(srcRect.right <= s.GetWidth());
+//	assert(srcRect.top > 0);
+//	assert(srcRect.bottom <= s.GetHeight());
+//
+//	if (x < clipRect.left)
+//	{
+//		srcRect.left += clipRect.left - x;
+//		x = clipRect.left;
+//	}
+//	if (y < clipRect.top)
+//	{
+//		srcRect.top += clipRect.top - y;
+//		y = clipRect.top;
+//	}
+//	if (x + srcRect.GetWidth() > clipRect.right)
+//	{
+//		srcRect.right -= x + srcRect.GetWidth() - clipRect.right;
+//
+//	}
+//	if (y + srcRect.GetHeight() > clipRect.bottom)
+//	{
+//		srcRect.bottom -= y + srcRect.GetHeight() - clipRect.bottom;
+//	}
+//
+//	for (int sy = srcRect.top; sy < srcRect.bottom; sy++)
+//	{
+//		for (int sx = srcRect.left; sx < srcRect.right; sx++)
+//		{
+//			const Color srcPixel = s.GetPixel(sx, sy);
+//			if(srcPixel != chroma)
+//			PutPixel(x + sx - srcRect.left, y + sy - srcRect.top, srcPixel);
+//		}
+//	}
+//}
+
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception
@@ -358,3 +458,40 @@ std::wstring Graphics::Exception::GetExceptionType() const
 {
 	return L"Chili Graphics Exception";
 }
+
+void Graphics::DrawCircle(int x, int y, int radius, Color c)
+{
+	const int rad_sq = radius * radius;
+	for (int y_loop = y - radius; y_loop < y + radius + 1; y_loop++)
+	{
+		for (int x_loop = x - radius; x_loop < x + radius + 1; x_loop++)
+		{
+			const int x_diff = x - x_loop;
+			const int y_diff = y - y_loop;
+			if (x_diff * x_diff + y_diff * y_diff <= rad_sq)
+			{
+				PutPixel(x_loop, y_loop, c);
+			}
+		}
+	}
+}
+void Graphics::DrawRect(int x0, int y0, int x1, int y1, Color c)
+{
+	if (x0 > x1)
+	{
+		std::swap(x0, x1);
+	}
+	if (y0 > y1)
+	{
+		std::swap(y0, y1);
+	}
+
+	for (int y = y0; y < y1; ++y)
+	{
+		for (int x = x0; x < x1; ++x)
+		{
+			PutPixel(x, y, c);
+		}
+	}
+}
+
