@@ -20,6 +20,9 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <chrono>
+#include <thread>
+
 
 Game::Game( MainWindow& wnd )
 	:
@@ -40,9 +43,8 @@ void Game::Go()
 void Game::UpdateModel()
 {
 
-
-
-
+	brd.MoveTo();
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
 void Game::ComposeFrame()
