@@ -53,9 +53,9 @@ void Board::DrawBorder()
 bool Board::IsUnvisitedTile(const Vei2 & gridpos)
 {
 	assert(gridpos.x>= 0);
-	assert(gridpos.x < width+1);
+	assert(gridpos.x <= width);
 	assert(gridpos.y >= 0);
-	assert(gridpos.y < height+1);
+	assert(gridpos.y <= height);
 
 	return AtTile(gridpos).IsUnvisited();
 }
@@ -77,7 +77,7 @@ void Board::MoveTo()
 		}
 	}
 	// check right
-	if (CurrPos.x < width)
+	if (CurrPos.x < width-1)
 	{
 		NewPos = CurrPos + MoveHoz;
 		bool PosLoc = IsUnvisitedTile(NewPos);
@@ -97,7 +97,7 @@ void Board::MoveTo()
 		}
 	}
 	// check down 
-	if (CurrPos.y < height)
+	if (CurrPos.y < height-1)
 	{
 		NewPos = CurrPos + MoveVert;
 		bool PosLoc = IsUnvisitedTile(NewPos);
@@ -126,6 +126,7 @@ void Board::MoveTo()
 		// decise where to move or pop back
 		if (NowhereFree == true)
 		{
+			OldPos = CurrPos;
 			moves.pop_back();
 			CurrPos = moves.back();
 		}
@@ -133,7 +134,7 @@ void Board::MoveTo()
 		{
 			std::random_device rd;
 			std::mt19937 rand{ rd() };
-			std::uniform_int_distribution<int> dist(0, v1.size() - 1);
+			std::uniform_int_distribution<int> dist(0, int(v1.size()) - 1);
 			int direction = 0;
 			int i = 0;
 			while (i == 0)
@@ -141,7 +142,7 @@ void Board::MoveTo()
 				i = v1[dist(rand)];
 				direction = i;
 			}
-
+			OldPos = CurrPos;
 			if (direction == 1)
 			{
 				CurrPos -= MoveHoz;
@@ -158,7 +159,7 @@ void Board::MoveTo()
 			{
 				CurrPos += MoveVert;
 			}
-
+			Paths.push_back(CurrPos);
 			moves.push_back(CurrPos);
 		}
 }
@@ -172,6 +173,67 @@ int Board::GetGridWidth()
 int Board::GetGridHeight()
 {
 	return height;
+}
+
+bool Board::TilesUnvisited()
+{
+	bool test;
+	for (Vei2 gridpos = { 0,0 }; gridpos.y < height; gridpos.y++)
+	{
+		for (gridpos.x = 0; gridpos.x < width; gridpos.x++)
+		{
+			test = AtTile(gridpos).IsUnvisited();
+			if (test == true)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void Board::DrawPaths(Graphics & gfx)
+{
+	Vei2 ScreenPos;
+	for (int i = 1; i < Paths.size(); i++)
+	{
+		Vei2 OffSet = Getoffset(Paths[i],Paths[i-1]);
+		ScreenPos.x = Paths[i].x * dimension + offset.x + cellPadding + borderWidth + borderPadding + OffSet.x;
+		ScreenPos.y = Paths[i].y * dimension + offset.y + cellPadding + borderWidth + borderPadding + OffSet.y;
+
+		const int dim = dimension - cellPadding * 2;
+		gfx.DrawRectFromCentre(ScreenPos.x, ScreenPos.y, dim, dim, Colors::White);
+	}
+}
+
+Vei2 Board::Getoffset(const Vei2 & newpos, const Vei2 & oldpos)
+{
+	Vei2 path_offset;
+	int HalfDim = dimension / 2;
+	if (newpos.x < oldpos.x && newpos.y == oldpos.y)
+	{
+		path_offset = { HalfDim, 0 };
+	}
+	else if (newpos.x > oldpos.x && newpos.y == oldpos.y)
+	{
+		path_offset = { -HalfDim, 0 };
+	}
+	else if (newpos.y < oldpos.y && newpos.x == oldpos.x)
+	{
+		path_offset = { 0, HalfDim };
+	}
+	else if (newpos.y > oldpos.y && newpos.x == oldpos.x)
+	{
+		path_offset = { 0, -HalfDim };
+	}
+	else
+	{
+		path_offset = { 0,0 };
+	}
+
+
+	return path_offset;
+	return Vei2();
 }
 
 Board::Tile & Board::AtTile(const Vei2 & gridpos)
@@ -210,8 +272,8 @@ void Board::Tile::Draw(const Vei2 & ScreenPos, const Vei2& GridPos, const Vei2& 
 	}
 	
 
-	const int dim = dimension - cellPadding * 2;
-	gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, dim , dim, TileColor);
+	const int dim = dimension- cellPadding * 2;
+	gfx.DrawRectFromCentre(ScreenPos.x, ScreenPos.y, dim , dim, TileColor);
 }
 
 bool Board::Tile::IsUnvisited()
@@ -225,7 +287,6 @@ bool Board::Tile::IsUnvisited()
 		return false;
 	}
 }
-
 
 
 

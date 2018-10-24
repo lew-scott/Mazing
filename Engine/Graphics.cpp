@@ -459,6 +459,16 @@ std::wstring Graphics::Exception::GetExceptionType() const
 	return L"Chili Graphics Exception";
 }
 
+void Graphics::DrawRectFromCentre(int x0, int y0, int width, int height, Color c)
+{
+	int halfwidth = width / 2;
+	int halfheight = height / 2;
+	int quarwidth = width / 4;
+	int quarheight = height / 4;
+
+	DrawRectDim(x0 + quarwidth, y0 + quarheight, halfwidth, halfheight, c);
+}
+
 void Graphics::DrawCircle(int x, int y, int radius, Color c)
 {
 	const int rad_sq = radius * radius;

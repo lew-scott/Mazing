@@ -42,13 +42,16 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-
-	brd.MoveTo();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	if (brd.TilesUnvisited() == true)
+	{
+		brd.MoveTo();
+	}
+		std::this_thread::sleep_for(std::chrono::milliseconds(0));
 }
 
 void Game::ComposeFrame()
 {
 	brd.DrawBorder();
 	brd.DrawCells(gfx);
+	brd.DrawPaths(gfx);
 }
