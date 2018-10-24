@@ -129,6 +129,7 @@ void Board::MoveTo()
 			OldPos = CurrPos;
 			moves.pop_back();
 			CurrPos = moves.back();
+			Paths.push_back(CurrPos);
 		}
 		else
 		{
