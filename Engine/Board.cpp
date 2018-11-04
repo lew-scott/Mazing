@@ -23,7 +23,7 @@ void Board::DrawCells(Graphics& gfx)
 			 ScreenPos.x = gridpos.x * dimension + offset.x + cellPadding + borderWidth + borderPadding;
 			 ScreenPos.y = gridpos.y * dimension + offset.y + cellPadding + borderWidth + borderPadding;
 
-			AtTile(gridpos).Draw(ScreenPos, gridpos, CurrPos, gfx);
+			AtTile(gridpos).Draw(ScreenPos, gridpos, CurrPos, gfx, drawing);
 		}
 	}
 
@@ -66,6 +66,7 @@ void Board::MoveTo()
 	Vei2 NewPos;
 	Vei2 MoveHoz = { 1,0 };
 	Vei2 MoveVert = { 0,1 };
+	AtTile(CurrPos).SetCurrent();
 	//check left
 	if (CurrPos.x > 0)
 	{
@@ -237,6 +238,23 @@ Vei2 Board::Getoffset(const Vei2 & newpos, const Vei2 & oldpos)
 	return Vei2();
 }
 
+void Board::GetStart(const Vei2 & gridpos)
+{
+	AtTile(gridpos).SetStart();
+}
+
+void Board::GetEnd(const Vei2 & gridpos)
+{
+	AtTile(gridpos).SetEnd();
+}
+
+bool Board::StopDrawing()
+{
+	AtTile(CurrPos).SetCurrent();
+	return drawing = false;
+}
+
+
 Board::Tile & Board::AtTile(const Vei2 & gridpos)
 {
 	return grid[gridpos.y * width + gridpos.x];
@@ -247,19 +265,20 @@ const Board::Tile & Board::AtTile(const Vei2 & gridpos) const
 	return grid[gridpos.y * width + gridpos.x];
 }
 
-void Board::Tile::Draw(const Vei2 & ScreenPos, const Vei2& GridPos, const Vei2& CurrPos, Graphics & gfx)
+void Board::Tile::Draw(const Vei2 & ScreenPos, const Vei2& GridPos, const Vei2& CurrPos, Graphics & gfx, bool drawing)
 {
 	Color TileColor;
-
-	if (CurrPos.x == GridPos.x && CurrPos.y == GridPos.y)
+	if (drawing == true)
 	{
-		state = State::Current;
+		if (CurrPos.x == GridPos.x && CurrPos.y == GridPos.y)
+		{
+			state = State::Current;
+		}
 	}
 
 	switch (state)
 	{
 	case State::Current:
-		state = State::Visited;
 		TileColor = Colors::Green;
 		break;
 
@@ -270,6 +289,15 @@ void Board::Tile::Draw(const Vei2 & ScreenPos, const Vei2& GridPos, const Vei2& 
 	case State::Unvisited:
 		TileColor = Colors::Gray;
 		break;
+
+	case State::Start:
+		TileColor = Colors::Blue;
+		break;
+
+	case State::End:
+		TileColor = Colors::Red;
+		break;
+
 	}
 	
 
@@ -287,6 +315,21 @@ bool Board::Tile::IsUnvisited()
 	{
 		return false;
 	}
+}
+
+Board::Tile::State Board::Tile::SetStart()
+{
+	return state = State::Start;
+}
+
+Board::Tile::State Board::Tile::SetEnd()
+{
+	return state = State::End;
+}
+
+Board::Tile::State Board::Tile::SetCurrent()
+{
+	return state = State::Visited;
 }
 
 

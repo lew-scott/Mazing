@@ -48,4 +48,6 @@ private:
 	/********************************/
 
 	Vei2 delta_loc;
+	bool DrawnBeginEnd = false;
+	
 };

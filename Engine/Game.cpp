@@ -22,6 +22,7 @@
 #include "Game.h"
 #include <chrono>
 #include <thread>
+#include <random>
 
 
 Game::Game( MainWindow& wnd )
@@ -42,11 +43,26 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (brd.TilesUnvisited() == true)
+	while (brd.TilesUnvisited() == true)
 	{
 		brd.MoveTo();
 	}
-		std::this_thread::sleep_for(std::chrono::milliseconds(0));
+
+	if (DrawnBeginEnd == false)
+	{
+				std::random_device rd;
+				std::mt19937 rng(rd());
+				std::uniform_int_distribution<int> lowx(0, 4);
+				std::uniform_int_distribution<int> lowy(0, 24);
+				std::uniform_int_distribution<int> highx(31, 34);
+				std::uniform_int_distribution<int> highy(0, 24);
+
+				brd.StopDrawing();
+				brd.GetStart({ lowx(rng), lowy(rng) });
+				brd.GetEnd({ highx(rng),highy(rng) });
+				DrawnBeginEnd = true;
+	}
+	//std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
 void Game::ComposeFrame()
