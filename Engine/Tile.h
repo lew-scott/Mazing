@@ -1,20 +1,21 @@
 #pragma once
 #include "Graphics.h"
+#include "Vei2.h"
 
 class Tile
 {
 public:
-	static void VertPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void HorzPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void CorRDPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void CorLDPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void CorRUPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void CorLUPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void TRightPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void TLeftPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void TUpPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void TDownPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void FourWayPipe(int ScreenPosX, int ScreenPosY, Graphics& gfx);
-	static void DrawSquare(int ScreenPosX, int ScreenPosY, Graphics& gfx);
+	static void VertPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void HorzPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void CorRDPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void CorLDPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void CorRUPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void CorLUPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void TRightPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void TLeftPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void TUpPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void TDownPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void FourWayPipe(const Vei2& ScreenPos, Graphics& gfx);
+	static void DrawSquare(const Vei2& ScreenPos, Graphics& gfx);
 
 };
