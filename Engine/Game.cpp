@@ -23,6 +23,7 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include "Tile.h"
 
 
 Game::Game( MainWindow& wnd )
@@ -68,6 +69,7 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	brd.DrawBorder();
-	brd.DrawCells(gfx);
-	brd.DrawPaths(gfx);
+	//brd.DrawCells(gfx);
+	//brd.DrawPaths(gfx);
+
 }

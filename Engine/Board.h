@@ -69,4 +69,7 @@ private:
 	std::vector<Vei2> Paths = { CurrPos };
 	Graphics& gfx;
 	
+	//new code 
+
+	
 };

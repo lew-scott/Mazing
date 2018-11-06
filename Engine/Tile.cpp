@@ -277,3 +277,103 @@ void Tile::DrawSquare(const Vei2& ScreenPos, Graphics & gfx)
 		}
 	}
 }
+
+void Tile::LeftToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+{
+	for (int y = 0; y < 3; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 17; y < 20; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 17; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+}
+
+void Tile::RightToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+{
+	for (int y = 0; y < 3; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 17; y < 20; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+}
+
+void Tile::UpToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+{
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 17; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 17; y < 20; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+}
+
+void Tile::DownToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+{
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 17; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 0; y < 3; y++)
+	{
+		for (int x = 0; x < 20; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+	for (int y = 0; y < 20; y++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			gfx.PutPixel(ScreenPos.x + x, ScreenPos.y + y, Colors::Blue);
+		}
+	}
+}

@@ -17,5 +17,10 @@ public:
 	static void TDownPipe(const Vei2& ScreenPos, Graphics& gfx);
 	static void FourWayPipe(const Vei2& ScreenPos, Graphics& gfx);
 	static void DrawSquare(const Vei2& ScreenPos, Graphics& gfx);
+	static void LeftToEnd(const Vei2& ScreenPos, Graphics& gfx);
+	static void RightToEnd(const Vei2& ScreenPos, Graphics& gfx);
+	static void UpToEnd(const Vei2& ScreenPos, Graphics& gfx);
+	static void DownToEnd(const Vei2& ScreenPos, Graphics& gfx);
+
 
 };
