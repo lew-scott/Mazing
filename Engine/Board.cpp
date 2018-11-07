@@ -21,8 +21,8 @@ void Board::DrawCells(Graphics& gfx)
 		for (gridpos.x = 0; gridpos.x < width; gridpos.x++)
 		{
 
-			 ScreenPos.x = gridpos.x * dimension + offset  + borderWidth + borderPadding;
-			 ScreenPos.y = gridpos.y * dimension + offset  + borderWidth + borderPadding;
+			 ScreenPos.x = gridpos.x * dimension + offset  + borderWidth;
+			 ScreenPos.y = gridpos.y * dimension + offset  + borderWidth;
 
 			
 			AtTile(gridpos).Draw(ScreenPos,gfx);
@@ -37,8 +37,8 @@ void Board::DrawBorder()
 	//Outer boarder
 	const int top = offset;
 	const int left = offset;
-	const int bottom = top + (borderWidth + borderPadding) * 2 + height * dimension;
-	const int right = left + (borderWidth + borderPadding) * 2 + width * dimension;
+	const int bottom = top + borderWidth * 2 + height * dimension;
+	const int right = left + borderWidth * 2 + width * dimension;
 
 	// top
 	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Blue);
@@ -48,6 +48,15 @@ void Board::DrawBorder()
 	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Blue);
 	// bottom
 	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Blue);
+}
+
+void Board::DrawPosInMaze()
+{
+	Vei2 ScreenPos;
+	ScreenPos.x = CurrPos.x * dimension + offset + borderWidth + 4;
+	ScreenPos.y = CurrPos.y * dimension + offset + borderWidth + 4;
+
+	gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 13, 13, Colors::White);
 }
 
 
@@ -61,13 +70,13 @@ bool Board::IsUnvisitedTile(const Vei2 & gridpos)
 	return AtTile(gridpos).IsUnvisited();
 }
 
-void Board::MoveTo()
+void Board::DesignMaze()
 {
 	std::vector<int> v1 = { 0,0,0,0 }; // left, right, up, down
 	Vei2 NewPos;
 	Vei2 MoveHoz = { 1,0 };
 	Vei2 MoveVert = { 0,1 };
-	AtTile(CurrPos).SetCurrent();
+	AtTile(CurrPos).SetToVisited();
 	//check left
 	if (CurrPos.x > 0)
 	{
@@ -125,12 +134,12 @@ void Board::MoveTo()
 			}
 		}
 
+
 		// decise where to move or pop back
 		if (NowhereFree == true)
 		{
 			CurrPos = moves.rbegin()[1];
 			moves.pop_back();
-			CurrPos = moves.back();
 		}
 		else
 		{
@@ -139,16 +148,16 @@ void Board::MoveTo()
 			std::uniform_int_distribution<int> dist(0, int(v1.size()) - 1);
 			int direction = 0;
 			int i = 0;
-			while (i == 0)
+			while (i == 0) // get a random direction, based on tiles available around itself
 			{
 				i = v1[dist(rand)];
 				direction = i;
 			}
 			if (direction == 1)
 			{
-				AtTile(CurrPos).setLeftConnection(); 
-				CurrPos -= MoveHoz;
-				AtTile(CurrPos).setRightConnection();
+				AtTile(CurrPos).setLeftConnection();  // set connection at old tile with new tile
+				CurrPos -= MoveHoz;				      // move
+				AtTile(CurrPos).setRightConnection(); // set connection at new tile with previous
 			}
 			if (direction == 2)
 			{
@@ -173,15 +182,6 @@ void Board::MoveTo()
 }
 
 
-int Board::GetGridWidth()
-{
-	return width;
-}
-
-int Board::GetGridHeight()
-{
-	return height;
-}
 
 bool Board::TilesUnvisited()
 {
@@ -200,7 +200,15 @@ bool Board::TilesUnvisited()
 	return false;
 }
 
+void Board::SetNewCurrent(const Vei2& gridpos)
+{
+	CurrPos = gridpos;
+}
 
+void Board::MoveBy(const Vei2& delta_loc)
+{
+	CurrPos = CurrPos + delta_loc;
+}
 
 Board::Tile & Board::AtTile(const Vei2 & gridpos)
 {
@@ -311,8 +319,28 @@ bool Board::Tile::setDownConnection()
 	return DownConnection = true;
 }
 
+bool Board::Tile::checkLeftConnnection()
+{
+	return LeftConnection;
+}
 
-Board::Tile::State Board::Tile::SetCurrent()
+bool Board::Tile::checkRightConnection()
+{
+	return RightConnection;
+}
+
+bool Board::Tile::checkUpConnection()
+{
+	return UpConnection;
+}
+
+bool Board::Tile::checkDownConnection()
+{
+	return DownConnection;
+}
+
+
+Board::Tile::State Board::Tile::SetToVisited()
 {
 	return state = State::Visited;
 }

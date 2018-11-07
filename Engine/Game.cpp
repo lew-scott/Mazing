@@ -45,10 +45,10 @@ void Game::UpdateModel()
 {
 	while (brd.TilesUnvisited() == true)
 	{
-		brd.MoveTo();
+		brd.DesignMaze();
 	}
 
-	if (DrawnBeginEnd == false)
+	if (SetStartEnd == false)
 	{
 				std::random_device rd;
 				std::mt19937 rng(rd());
@@ -57,14 +57,21 @@ void Game::UpdateModel()
 				std::uniform_int_distribution<int> highx(31, 34);
 				std::uniform_int_distribution<int> highy(0, 24);
 
-				DrawnBeginEnd = true;
+				brd.SetNewCurrent({ lowx(rng),lowy(rng) });
+
+				SetStartEnd = true;
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
 
 void Game::ComposeFrame()
 {
 	brd.DrawBorder();
 	brd.DrawCells(gfx);
+	if (SetStartEnd == true)
+	{
+		brd.DrawPosInMaze();
+	}
+
 
 }

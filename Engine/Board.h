@@ -13,7 +13,6 @@ class Board
 	{
 		enum class State
 		{
-			Current,
 			Visited,
 			Unvisited,
 			Start,
@@ -29,7 +28,12 @@ class Board
 		bool setUpConnection();
 		bool setDownConnection();
 
-		State SetCurrent();
+		bool checkLeftConnnection();
+		bool checkRightConnection();
+		bool checkUpConnection();
+		bool checkDownConnection();
+
+		State SetToVisited();
 
 	private:
 		State state = State::Unvisited;
@@ -45,11 +49,12 @@ public:
 	Board(Graphics& gfx);
 	void DrawCells(Graphics& gfx);
 	void DrawBorder();
+	void DrawPosInMaze();
 	bool IsUnvisitedTile(const Vei2& gridpos);
-	void MoveTo();
-	int GetGridWidth();
-	int GetGridHeight();
+	void DesignMaze();
 	bool TilesUnvisited();
+	void SetNewCurrent(const Vei2& gridpos);
+	void MoveBy(const Vei2& delta_loc);
 
 private:
 	Tile& AtTile(const Vei2& gridpos);
@@ -60,8 +65,6 @@ private:
 	static constexpr int width = 35;
 	static constexpr int height = 25;
 	static constexpr int borderWidth = 4;
-	static constexpr int borderPadding = 0;
-	bool drawing = true;
 	static constexpr int offset = 40;
 	Vei2 CurrPos = { 0,0 };
 	Tile grid[width * height];
