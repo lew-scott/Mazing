@@ -1,7 +1,7 @@
-#include "Tile.h"
+#include "Walls.h"
 
 
-void Tile::VertPipe(const Vei2& ScreenPos, Graphics & gfx)
+void Walls::VertPipe(const Vei2& ScreenPos, Graphics & gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{
@@ -16,7 +16,7 @@ void Tile::VertPipe(const Vei2& ScreenPos, Graphics & gfx)
 	}
 }
 
-void Tile::HorzPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::HorzPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int x = 0; x < 20; x++)
 	{
@@ -31,7 +31,7 @@ void Tile::HorzPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::CorRDPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::CorRDPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{
@@ -56,7 +56,7 @@ void Tile::CorRDPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::CorLDPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::CorLDPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{
@@ -81,7 +81,7 @@ void Tile::CorLDPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::CorRUPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::CorRUPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 
 	for (int y = 0; y < 20; y++)
@@ -107,7 +107,7 @@ void Tile::CorRUPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::CorLUPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::CorLUPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 
 	for (int y = 0; y < 20; y++)
@@ -133,7 +133,7 @@ void Tile::CorLUPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::TRightPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::TRightPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 
 	for (int y = 0; y < 20; y++)
@@ -159,7 +159,7 @@ void Tile::TRightPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::TLeftPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::TLeftPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{
@@ -184,7 +184,7 @@ void Tile::TLeftPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::TUpPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::TUpPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 
 	for (int y = 17; y < 20; y++)
@@ -210,7 +210,7 @@ void Tile::TUpPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::TDownPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::TDownPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int y = 0; y < 3; y++)
 	{
@@ -235,7 +235,7 @@ void Tile::TDownPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::FourWayPipe(const Vei2& ScreenPos, Graphics& gfx)
+void Walls::FourWayPipe(const Vei2& ScreenPos, Graphics& gfx)
 {
 	for (int y = 0; y < 3; y++)
 	{
@@ -267,7 +267,7 @@ void Tile::FourWayPipe(const Vei2& ScreenPos, Graphics& gfx)
 	}
 }
 
-void Tile::DrawSquare(const Vei2& ScreenPos, Graphics & gfx)
+void Walls::DrawSquare(const Vei2& ScreenPos, Graphics & gfx)
 { 
 	for (int y = 4; y < 16; y++)
 	{
@@ -278,7 +278,7 @@ void Tile::DrawSquare(const Vei2& ScreenPos, Graphics & gfx)
 	}
 }
 
-void Tile::LeftToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+void Walls::LeftToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 {
 	for (int y = 0; y < 3; y++)
 	{
@@ -303,7 +303,7 @@ void Tile::LeftToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 	}
 }
 
-void Tile::RightToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+void Walls::RightToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 {
 	for (int y = 0; y < 3; y++)
 	{
@@ -328,7 +328,7 @@ void Tile::RightToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 	}
 }
 
-void Tile::UpToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+void Walls::TopToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{
@@ -353,7 +353,7 @@ void Tile::UpToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 	}
 }
 
-void Tile::DownToEnd(const Vei2 & ScreenPos, Graphics & gfx)
+void Walls::BottomToEnd(const Vei2 & ScreenPos, Graphics & gfx)
 {
 	for (int y = 0; y < 20; y++)
 	{

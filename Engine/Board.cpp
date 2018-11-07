@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <vector>
 #include <random>
+#include "Walls.h"
 
 
 Board::Board(Graphics & gfx)
@@ -20,10 +21,11 @@ void Board::DrawCells(Graphics& gfx)
 		for (gridpos.x = 0; gridpos.x < width; gridpos.x++)
 		{
 
-			 ScreenPos.x = gridpos.x * dimension + offset.x + cellPadding + borderWidth + borderPadding;
-			 ScreenPos.y = gridpos.y * dimension + offset.y + cellPadding + borderWidth + borderPadding;
+			 ScreenPos.x = gridpos.x * dimension + offset  + borderWidth + borderPadding;
+			 ScreenPos.y = gridpos.y * dimension + offset  + borderWidth + borderPadding;
 
-			AtTile(gridpos).Draw(ScreenPos, gridpos, CurrPos, gfx, drawing);
+			
+			AtTile(gridpos).Draw(ScreenPos,gfx);
 		}
 	}
 
@@ -32,19 +34,19 @@ void Board::DrawCells(Graphics& gfx)
 
 void Board::DrawBorder()
 {
-	const int top = offset.y;
-	const int left = offset.x;
+	const int top = offset;
+	const int left = offset;
 	const int bottom = top + (borderWidth + borderPadding) * 2 + height * dimension;
 	const int right = left + (borderWidth + borderPadding) * 2 + width * dimension;
 
 	// top
-	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Blue );
+	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Green );
 	// left
-	gfx.DrawRect( left,top + borderWidth,left + borderWidth,bottom - borderWidth, Colors::Blue);
+	gfx.DrawRect( left,top + borderWidth,left + borderWidth,bottom - borderWidth, Colors::Green);
 	// right
-	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Blue);
+	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Green);
 	// bottom
-	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Blue);
+	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Green);
 
 
 }
@@ -130,7 +132,6 @@ void Board::MoveTo()
 			OldPos = CurrPos;
 			moves.pop_back();
 			CurrPos = moves.back();
-			Paths.push_back(CurrPos);
 		}
 		else
 		{
@@ -148,20 +149,27 @@ void Board::MoveTo()
 			if (direction == 1)
 			{
 				CurrPos -= MoveHoz;
+				AtTile(OldPos).setLeftConnection();
+				AtTile(CurrPos).setRightConnection();
 			}
 			if (direction == 2)
 			{
 				CurrPos += MoveHoz;
+				AtTile(OldPos).setRightConnection();
+				AtTile(CurrPos).setLeftConnection();
 			}
 			if (direction == 3)
 			{
 				CurrPos -= MoveVert;
+				AtTile(OldPos).setUpConnection();
+				AtTile(CurrPos).setDownConnection();
 			}
 			if (direction == 4)
 			{
 				CurrPos += MoveVert;
+				AtTile(OldPos).setDownConnection();
+				AtTile(CurrPos).setUpConnection();
 			}
-			Paths.push_back(CurrPos);
 			moves.push_back(CurrPos);
 		}
 }
@@ -194,65 +202,6 @@ bool Board::TilesUnvisited()
 	return false;
 }
 
-void Board::DrawPaths(Graphics & gfx)
-{
-	Vei2 ScreenPos;
-	for (int i = 1; i < Paths.size(); i++)
-	{
-		Vei2 OffSet = Getoffset(Paths[i],Paths[i-1]);
-		ScreenPos.x = Paths[i].x * dimension + offset.x + cellPadding + borderWidth + borderPadding + OffSet.x;
-		ScreenPos.y = Paths[i].y * dimension + offset.y + cellPadding + borderWidth + borderPadding + OffSet.y;
-
-		const int dim = dimension - cellPadding * 2;
-		gfx.DrawRectFromCentre(ScreenPos.x, ScreenPos.y, dim, dim, Colors::White);
-	}
-}
-
-Vei2 Board::Getoffset(const Vei2 & newpos, const Vei2 & oldpos)
-{
-	Vei2 path_offset;
-	int HalfDim = dimension / 2;
-	if (newpos.x < oldpos.x && newpos.y == oldpos.y)
-	{
-		path_offset = { HalfDim, 0 };
-	}
-	else if (newpos.x > oldpos.x && newpos.y == oldpos.y)
-	{
-		path_offset = { -HalfDim, 0 };
-	}
-	else if (newpos.y < oldpos.y && newpos.x == oldpos.x)
-	{
-		path_offset = { 0, HalfDim };
-	}
-	else if (newpos.y > oldpos.y && newpos.x == oldpos.x)
-	{
-		path_offset = { 0, -HalfDim };
-	}
-	else
-	{
-		path_offset = { 0,0 };
-	}
-
-
-	return path_offset;
-	return Vei2();
-}
-
-void Board::GetStart(const Vei2 & gridpos)
-{
-	AtTile(gridpos).SetStart();
-}
-
-void Board::GetEnd(const Vei2 & gridpos)
-{
-	AtTile(gridpos).SetEnd();
-}
-
-bool Board::StopDrawing()
-{
-	AtTile(CurrPos).SetCurrent();
-	return drawing = false;
-}
 
 
 Board::Tile & Board::AtTile(const Vei2 & gridpos)
@@ -265,45 +214,72 @@ const Board::Tile & Board::AtTile(const Vei2 & gridpos) const
 	return grid[gridpos.y * width + gridpos.x];
 }
 
-void Board::Tile::Draw(const Vei2 & ScreenPos, const Vei2& GridPos, const Vei2& CurrPos, Graphics & gfx, bool drawing)
+
+
+void Board::Tile::Draw(const Vei2& ScreenPos, Graphics& gfx)
 {
-	Color TileColor;
-	if (drawing == true)
+
+	if (LeftConnection == true && RightConnection == false && UpConnection == false && DownConnection == false)
 	{
-		if (CurrPos.x == GridPos.x && CurrPos.y == GridPos.y)
-		{
-			state = State::Current;
-		}
+		Walls::LeftToEnd(ScreenPos, gfx);
 	}
-
-	switch (state)
+	else if (LeftConnection == false && RightConnection == true && UpConnection == false && DownConnection == false)
 	{
-	case State::Current:
-		TileColor = Colors::Green;
-		break;
-
-	case State::Visited:
-		TileColor = Colors::White;
-		break;
-
-	case State::Unvisited:
-		TileColor = Colors::Gray;
-		break;
-
-	case State::Start:
-		TileColor = Colors::Blue;
-		break;
-
-	case State::End:
-		TileColor = Colors::Red;
-		break;
-
+		Walls::RightToEnd(ScreenPos, gfx);
 	}
-	
-
-	const int dim = dimension- cellPadding * 2;
-	gfx.DrawRectFromCentre(ScreenPos.x, ScreenPos.y, dim , dim, TileColor);
-}
+	else if (LeftConnection == false && RightConnection == false && UpConnection == true && DownConnection == false)
+	{
+		Walls::TopToEnd(ScreenPos, gfx);
+	}
+	else if (LeftConnection == false && RightConnection == false && UpConnection == false && DownConnection == true)
+	{
+		Walls::BottomToEnd(ScreenPos, gfx);
+	}
+	else if (LeftConnection == false && RightConnection == false && UpConnection == true && DownConnection == true)
+	{
+		Walls::VertPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == true && UpConnection == false && DownConnection == false)
+	{
+		Walls::HorzPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == false && UpConnection == true && DownConnection == false)
+	{
+		Walls::CorLUPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == false && UpConnection == false && DownConnection == true)
+	{
+		Walls::CorLDPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == false && RightConnection == true && UpConnection == true && DownConnection == false)
+	{
+		Walls::CorRUPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == false && RightConnection == true && UpConnection == false && DownConnection == true)
+	{
+		Walls::CorRDPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == true && UpConnection == true && DownConnection == false)
+	{
+		Walls::TUpPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == true && UpConnection == false && DownConnection == true)
+	{
+		Walls::TDownPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == true && RightConnection == false && UpConnection == true && DownConnection == true)
+	{
+		Walls::TLeftPipe(ScreenPos, gfx);
+	}
+	else if (LeftConnection == false && RightConnection == true && UpConnection == true && DownConnection == true)
+	{
+		Walls::TRightPipe(ScreenPos, gfx);
+	}
+	else if(LeftConnection == true && RightConnection == true && UpConnection == true && DownConnection == true)
+	{
+		Walls::FourWayPipe(ScreenPos, gfx);
+	}
+} 
 
 bool Board::Tile::IsUnvisited()
 {
@@ -317,15 +293,26 @@ bool Board::Tile::IsUnvisited()
 	}
 }
 
-Board::Tile::State Board::Tile::SetStart()
+bool Board::Tile::setLeftConnection()
 {
-	return state = State::Start;
+	return LeftConnection = true;
 }
 
-Board::Tile::State Board::Tile::SetEnd()
+bool Board::Tile::setRightConnection()
 {
-	return state = State::End;
+	return RightConnection = true;
 }
+
+bool Board::Tile::setUpConnection()
+{
+	return UpConnection = true;
+}
+
+bool Board::Tile::setDownConnection()
+{
+	return DownConnection = true;
+}
+
 
 Board::Tile::State Board::Tile::SetCurrent()
 {

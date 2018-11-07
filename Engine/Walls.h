@@ -2,7 +2,7 @@
 #include "Graphics.h"
 #include "Vei2.h"
 
-class Tile
+class Walls
 {
 public:
 	static void VertPipe(const Vei2& ScreenPos, Graphics& gfx);
@@ -19,8 +19,8 @@ public:
 	static void DrawSquare(const Vei2& ScreenPos, Graphics& gfx);
 	static void LeftToEnd(const Vei2& ScreenPos, Graphics& gfx);
 	static void RightToEnd(const Vei2& ScreenPos, Graphics& gfx);
-	static void UpToEnd(const Vei2& ScreenPos, Graphics& gfx);
-	static void DownToEnd(const Vei2& ScreenPos, Graphics& gfx);
+	static void TopToEnd(const Vei2& ScreenPos, Graphics& gfx);
+	static void BottomToEnd(const Vei2& ScreenPos, Graphics& gfx);
 
 
 };

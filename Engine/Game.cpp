@@ -23,7 +23,6 @@
 #include <chrono>
 #include <thread>
 #include <random>
-#include "Tile.h"
 
 
 Game::Game( MainWindow& wnd )
@@ -58,18 +57,14 @@ void Game::UpdateModel()
 				std::uniform_int_distribution<int> highx(31, 34);
 				std::uniform_int_distribution<int> highy(0, 24);
 
-				brd.StopDrawing();
-				brd.GetStart({ lowx(rng), lowy(rng) });
-				brd.GetEnd({ highx(rng),highy(rng) });
 				DrawnBeginEnd = true;
 	}
-	//std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
 void Game::ComposeFrame()
 {
 	brd.DrawBorder();
-	//brd.DrawCells(gfx);
-	//brd.DrawPaths(gfx);
+	brd.DrawCells(gfx);
 
 }

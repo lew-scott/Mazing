@@ -22,14 +22,21 @@ class Board
 
 
 	public:
-		void Draw(const Vei2& ScreenPos, const Vei2& GridPos, const Vei2& CurrPos, Graphics& gfx, bool drawing);
+		void Draw(const Vei2& GridPos, Graphics& gfx);
 		bool IsUnvisited();
-		State SetStart();
-		State SetEnd();
+		bool setLeftConnection();
+		bool setRightConnection();
+		bool setUpConnection();
+		bool setDownConnection();
+
 		State SetCurrent();
 
 	private:
 		State state = State::Unvisited;
+		bool LeftConnection = false;
+		bool RightConnection = false;
+		bool UpConnection = false;
+		bool DownConnection = false;
 	};
 
 
@@ -43,11 +50,6 @@ public:
 	int GetGridWidth();
 	int GetGridHeight();
 	bool TilesUnvisited();
-	void DrawPaths(Graphics& gfx);
-	Vei2 Getoffset(const Vei2& newpos, const Vei2& oldpos);
-	void GetStart(const Vei2& gridpos);
-	void GetEnd(const Vei2& gridpos);
-	bool StopDrawing();
 
 private:
 	Tile& AtTile(const Vei2& gridpos);
@@ -59,17 +61,13 @@ private:
 	static constexpr int width = 35;
 	static constexpr int height = 25;
 	static constexpr int borderWidth = 4;
-	static constexpr int borderPadding = 2;
+	static constexpr int borderPadding = 4;
 	bool drawing = true;
-	Vei2 offset = { 42,42 };
+	static constexpr int offset = 40;
 	Vei2 CurrPos = { 0,0 };
 	Vei2 OldPos;
 	Tile grid[width * height];
 	std::vector<Vei2> moves = { CurrPos };
-	std::vector<Vei2> Paths = { CurrPos };
 	Graphics& gfx;
-	
-	//new code 
-
 	
 };
