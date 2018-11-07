@@ -34,21 +34,20 @@ void Board::DrawCells(Graphics& gfx)
 
 void Board::DrawBorder()
 {
+	//Outer boarder
 	const int top = offset;
 	const int left = offset;
 	const int bottom = top + (borderWidth + borderPadding) * 2 + height * dimension;
 	const int right = left + (borderWidth + borderPadding) * 2 + width * dimension;
 
 	// top
-	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Green );
+	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Blue);
 	// left
-	gfx.DrawRect( left,top + borderWidth,left + borderWidth,bottom - borderWidth, Colors::Green);
+	gfx.DrawRect( left,top + borderWidth,left + borderWidth,bottom - borderWidth, Colors::Blue);
 	// right
-	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Green);
+	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Blue);
 	// bottom
-	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Green);
-
-
+	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Blue);
 }
 
 
@@ -129,7 +128,7 @@ void Board::MoveTo()
 		// decise where to move or pop back
 		if (NowhereFree == true)
 		{
-			OldPos = CurrPos;
+			CurrPos = moves.rbegin()[1];
 			moves.pop_back();
 			CurrPos = moves.back();
 		}
@@ -145,29 +144,28 @@ void Board::MoveTo()
 				i = v1[dist(rand)];
 				direction = i;
 			}
-			OldPos = CurrPos;
 			if (direction == 1)
 			{
+				AtTile(CurrPos).setLeftConnection(); 
 				CurrPos -= MoveHoz;
-				AtTile(OldPos).setLeftConnection();
 				AtTile(CurrPos).setRightConnection();
 			}
 			if (direction == 2)
 			{
+				AtTile(CurrPos).setRightConnection();
 				CurrPos += MoveHoz;
-				AtTile(OldPos).setRightConnection();
 				AtTile(CurrPos).setLeftConnection();
 			}
 			if (direction == 3)
 			{
+				AtTile(CurrPos).setUpConnection();
 				CurrPos -= MoveVert;
-				AtTile(OldPos).setUpConnection();
 				AtTile(CurrPos).setDownConnection();
 			}
 			if (direction == 4)
 			{
+				AtTile(CurrPos).setDownConnection();
 				CurrPos += MoveVert;
-				AtTile(OldPos).setDownConnection();
 				AtTile(CurrPos).setUpConnection();
 			}
 			moves.push_back(CurrPos);

@@ -57,15 +57,13 @@ private:
 
 private:
 	static constexpr int dimension = 20;
-	static constexpr int cellPadding = 1;
 	static constexpr int width = 35;
 	static constexpr int height = 25;
 	static constexpr int borderWidth = 4;
-	static constexpr int borderPadding = 4;
+	static constexpr int borderPadding = 0;
 	bool drawing = true;
 	static constexpr int offset = 40;
 	Vei2 CurrPos = { 0,0 };
-	Vei2 OldPos;
 	Tile grid[width * height];
 	std::vector<Vei2> moves = { CurrPos };
 	Graphics& gfx;
