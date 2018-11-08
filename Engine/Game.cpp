@@ -29,8 +29,11 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brd(gfx)
+	brd(gfx, { 4,4 })
 {
+	//std::random_device rd;
+	//std::mt19937 rng(rd());
+	//std::uniform_int_distribution<int> maze(0, 20);
 }
 
 void Game::Go()

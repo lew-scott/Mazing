@@ -46,7 +46,7 @@ class Board
 
 
 public:
-	Board(Graphics& gfx);
+	Board(Graphics& gfx, const Vei2& CurrPos);
 	void DrawCells(Graphics& gfx);
 	void DrawBorder();
 	void DrawPosInMaze();
@@ -68,7 +68,7 @@ private:
 	static constexpr int height = 25;
 	static constexpr int borderWidth = 4;
 	static constexpr int offset = 40;
-	Vei2 CurrPos = { 0,0 };
+	Vei2 CurrPos;
 	Vei2 EndPos;
 	Tile grid[width * height];
 	std::vector<Vei2> moves = { CurrPos };
