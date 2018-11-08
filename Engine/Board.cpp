@@ -152,8 +152,6 @@ void Board::DesignMaze()
 			}
 		}
 
-
-
 		// decise where to move or pop back
 		if (NowhereFree == true)
 		{
@@ -197,40 +195,6 @@ void Board::DesignMaze()
 			}
 			moves.push_back(CurrPos);
 		}
-
-		// chance to make random move in maze to create further pathways
-		//std::uniform_int_distribution<int> ChanceToNewPath(0, 9);
-		//std::uniform_int_distribution<int> RandomConnection(1, 4);
-
-		//if (ChanceToNewPath(rand) == 9 && moves.size() > 5)
-		//{
-		//	int Move = RandomConnection(rand);
-		//	if (Move == 1 && CurrPos.x > 0)
-		//	{
-		//		AtTile(CurrPos).setLeftConnection();  // set connection at old tile with new tile
-		//		CurrPos -= MoveHoz;				      // move
-		//		AtTile(CurrPos).setRightConnection(); // set connection at new tile with previous
-		//	}
-		//	if (Move == 2 && CurrPos.x < width)
-		//	{
-		//		AtTile(CurrPos).setRightConnection();
-		//		CurrPos += MoveHoz;
-		//		AtTile(CurrPos).setLeftConnection();
-		//	}
-		//	if (Move == 3 && CurrPos.y > 0)
-		//	{
-		//		AtTile(CurrPos).setUpConnection();
-		//		CurrPos -= MoveVert;
-		//		AtTile(CurrPos).setDownConnection();
-		//	}
-		//	if (Move == 4 && CurrPos.y < height)
-		//	{
-		//		AtTile(CurrPos).setDownConnection();
-		//		CurrPos += MoveVert;
-		//		AtTile(CurrPos).setUpConnection();
-		//	}
-		//	moves.push_back(CurrPos);
-		//}
 }
 
 
