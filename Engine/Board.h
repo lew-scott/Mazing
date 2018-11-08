@@ -50,10 +50,12 @@ public:
 	void DrawCells(Graphics& gfx);
 	void DrawBorder();
 	void DrawPosInMaze();
+	void DrawEndPos();
 	bool IsUnvisitedTile(const Vei2& gridpos);
 	void DesignMaze();
 	bool TilesUnvisited();
 	void SetNewCurrent(const Vei2& gridpos);
+	void SetEndPos(const Vei2& gridpos);
 	void MoveBy(const Vei2& delta_loc);
 
 private:
@@ -67,6 +69,7 @@ private:
 	static constexpr int borderWidth = 4;
 	static constexpr int offset = 40;
 	Vei2 CurrPos = { 0,0 };
+	Vei2 EndPos;
 	Tile grid[width * height];
 	std::vector<Vei2> moves = { CurrPos };
 	Graphics& gfx;

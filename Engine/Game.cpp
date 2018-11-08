@@ -43,35 +43,72 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	while (brd.TilesUnvisited() == true)
+	if(brd.TilesUnvisited() == true)
 	{
 		brd.DesignMaze();
 	}
 
 	if (SetStartEnd == false)
 	{
-				std::random_device rd;
-				std::mt19937 rng(rd());
-				std::uniform_int_distribution<int> lowx(0, 4);
-				std::uniform_int_distribution<int> lowy(0, 24);
-				std::uniform_int_distribution<int> highx(31, 34);
-				std::uniform_int_distribution<int> highy(0, 24);
-
-				brd.SetNewCurrent({ lowx(rng),lowy(rng) });
-
-				SetStartEnd = true;
+		std::random_device rd;
+		std::mt19937 rng(rd());
+		std::uniform_int_distribution<int> lowx(0, 4);
+		std::uniform_int_distribution<int> y(0, 24);
+		std::uniform_int_distribution<int> highx(31, 34);
+		brd.SetNewCurrent({ lowx(rng),y(rng) });
+		brd.SetEndPos({ highx(rng), y(rng) });
+		SetStartEnd = true;
 	}
-	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+	if (MoveCounter > MoveSpeed)
+	{
+		if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		{
+			brd.MoveBy({ -1,0 });
+			MoveCounter = 0;
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		{
+			brd.MoveBy({ 1,0 });
+			MoveCounter = 0;
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_UP))
+		{
+			brd.MoveBy({ 0,-1 });
+			MoveCounter = 0;
+		}
+		else if (wnd.kbd.KeyIsPressed(VK_DOWN))
+		{
+			brd.MoveBy({ 0,1 });
+			MoveCounter = 0;
+		}
+		else
+		{
+			brd.MoveBy({ 0,0 });
+		}
+	}
+	MoveCounter++;
+
+	if(count == FlashSpeedMax)
+	{
+		count = 0;
+	}
+
+
+	count++;
+	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
 
 void Game::ComposeFrame()
 {
 	brd.DrawBorder();
 	brd.DrawCells(gfx);
-	if (SetStartEnd == true)
+	brd.DrawEndPos();
+	if (count < FlashSpeed)
 	{
 		brd.DrawPosInMaze();
 	}
+	
 
 
 }

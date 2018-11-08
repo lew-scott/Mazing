@@ -49,5 +49,9 @@ private:
 
 	Vei2 delta_loc;
 	bool SetStartEnd = false;
-	
+	int MoveSpeed = 10;
+	int MoveCounter = 0;
+	int FlashSpeed = 25;
+	int FlashSpeedMax = 50; 
+	int count = 0;
 };
