@@ -29,7 +29,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brd(gfx, { 17,12 })
+	brd(gfx, { 4,4 })
 {
 	//std::random_device rd;
 	//std::mt19937 rng(rd());
@@ -46,7 +46,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	while(brd.TilesUnvisited() == true)
+	if(brd.TilesUnvisited() == true)
 	{
 		brd.DesignMaze();
 	}
@@ -99,7 +99,7 @@ void Game::UpdateModel()
 
 
 	count++;
-	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
+	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
 
 void Game::ComposeFrame()
