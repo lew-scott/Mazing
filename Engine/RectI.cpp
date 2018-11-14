@@ -5,7 +5,9 @@ RectI::RectI( int left_in,int right_in,int top_in,int bottom_in )
 	left( left_in ),
 	right( right_in ),
 	top( top_in ),
-	bottom( bottom_in )
+	bottom( bottom_in ),
+	width(right_in - left_in),
+	height(bottom_in - top_in)
 {
 }
 
@@ -54,12 +56,10 @@ Vei2 RectI::GetCenter() const
 	return Vei2( (left + right) / 2,(top + bottom) / 2 );
 }
 
-int RectI::GetWidth() const
+void RectI::moveRect(const Vei2 & NewPos)
 {
-	return right - left;
-}
-
-int RectI::GetHeight() const
-{
-	return bottom - top;
+	left += NewPos.x;
+	right += NewPos.x;
+	top += NewPos.y;
+	bottom += NewPos.y;
 }

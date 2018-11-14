@@ -15,12 +15,13 @@ public:
 	static RectI FromCenter( const Vei2& center,int halfWidth,int halfHeight );
 	RectI GetExpanded( int offset ) const;
 	Vei2 GetCenter() const;
-	int GetWidth() const;
-	int GetHeight() const; 
+	void moveRect(const Vei2& NewPos);
 
 public:
 	int left;
 	int right;
 	int top;
 	int bottom;
+	int width;
+	int height;
 };

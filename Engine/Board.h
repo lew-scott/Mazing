@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "Location.h"
+#include "RectI.h"
 #include <random>
 #include <vector>
 #include <memory>
@@ -57,6 +58,7 @@ public:
 	void SetNewCurrent(const Vei2& gridpos);
 	void SetEndPos(const Vei2& gridpos);
 	void MoveBy(const Vei2& delta_loc);
+	void MoveMazeInView(const Vei2& delta_loc);
 
 private:
 	Tile& AtTile(const Vei2& gridpos);
@@ -68,6 +70,7 @@ private:
 	static constexpr int height = 25;
 	static constexpr int borderWidth = 4;
 	static constexpr int offset = 40;
+	RectI MazeRect;
 	Vei2 CurrPos;
 	Vei2 EndPos;
 	Tile grid[width * height];

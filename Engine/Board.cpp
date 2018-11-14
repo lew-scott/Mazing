@@ -8,8 +8,8 @@
 Board::Board(Graphics & gfx, const Vei2& CurrPos)
 	:
 	gfx(gfx),
-	CurrPos(CurrPos)
-
+	CurrPos(CurrPos),
+	MazeRect({ offset + borderWidth,offset + borderWidth }, dimension * width, dimension * height)
 {
 }
 
@@ -26,8 +26,11 @@ void Board::DrawCells(Graphics& gfx)
 			 ScreenPos.x = gridpos.x * dimension + offset  + borderWidth;
 			 ScreenPos.y = gridpos.y * dimension + offset  + borderWidth;
 
-			
-			AtTile(gridpos).Draw(ScreenPos,gfx);
+			 if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
+			 && ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom )
+			 {
+				 AtTile(gridpos).Draw(ScreenPos, gfx);
+			 }
 		}
 	}
 
@@ -58,7 +61,11 @@ void Board::DrawPosInMaze()
 	ScreenPos.x = CurrPos.x * dimension + offset + borderWidth + 3;
 	ScreenPos.y = CurrPos.y * dimension + offset + borderWidth + 3;
 
-	gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::White);
+	if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
+		&& ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom)
+	{
+		gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::White);
+	}
 }
 
 void Board::DrawEndPos()
@@ -67,7 +74,11 @@ void Board::DrawEndPos()
 	ScreenPos.x = EndPos.x * dimension + offset + borderWidth + 3;
 	ScreenPos.y = EndPos.y * dimension + offset + borderWidth + 3;
 
-	gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::Red);
+	if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
+		&& ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom)
+	{
+		gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::Red);
+	}
 }
 
 
@@ -83,10 +94,10 @@ bool Board::IsUnvisitedTile(const Vei2 & gridpos)
 
 void Board::DesignMaze()
 {
-	assert(gridpos.x >= 0);
-	assert(gridpos.x <= width);
-	assert(gridpos.y >= 0);
-	assert(gridpos.y <= height);
+	assert(CurrPos.x >= 0);
+	assert(CurrPos.x <= width);
+	assert(CurrPos.y >= 0);
+	assert(CurrPos.y <= height);
 
 	std::random_device rd;
 	std::mt19937 rand{ rd() };
@@ -197,40 +208,6 @@ void Board::DesignMaze()
 			}
 			moves.push_back(CurrPos);
 		}
-
-		// chance to make random move in maze to create further pathways
-		//std::uniform_int_distribution<int> ChanceToNewPath(0, 9);
-		//std::uniform_int_distribution<int> RandomConnection(1, 4);
-
-		//if (ChanceToNewPath(rand) == 9 && moves.size() > 5)
-		//{
-		//	int Move = RandomConnection(rand);
-		//	if (Move == 1 && CurrPos.x > 0)
-		//	{
-		//		AtTile(CurrPos).setLeftConnection();  // set connection at old tile with new tile
-		//		CurrPos -= MoveHoz;				      // move
-		//		AtTile(CurrPos).setRightConnection(); // set connection at new tile with previous
-		//	}
-		//	if (Move == 2 && CurrPos.x < width)
-		//	{
-		//		AtTile(CurrPos).setRightConnection();
-		//		CurrPos += MoveHoz;
-		//		AtTile(CurrPos).setLeftConnection();
-		//	}
-		//	if (Move == 3 && CurrPos.y > 0)
-		//	{
-		//		AtTile(CurrPos).setUpConnection();
-		//		CurrPos -= MoveVert;
-		//		AtTile(CurrPos).setDownConnection();
-		//	}
-		//	if (Move == 4 && CurrPos.y < height)
-		//	{
-		//		AtTile(CurrPos).setDownConnection();
-		//		CurrPos += MoveVert;
-		//		AtTile(CurrPos).setUpConnection();
-		//	}
-		//	moves.push_back(CurrPos);
-		//}
 }
 
 
@@ -289,6 +266,11 @@ void Board::MoveBy(const Vei2& delta_loc)
 		CurrPos += delta_loc;
 	}
 	
+}
+
+void Board::MoveMazeInView(const Vei2 & delta_loc)
+{
+	MazeRect.moveRect(delta_loc);
 }
 
 

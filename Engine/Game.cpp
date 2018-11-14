@@ -46,7 +46,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if(brd.TilesUnvisited() == true)
+	while(brd.TilesUnvisited() == true)
 	{
 		brd.DesignMaze();
 	}
@@ -90,8 +90,27 @@ void Game::UpdateModel()
 			brd.MoveBy({ 0,0 });
 		}
 	}
-	MoveCounter++;
 
+	if (MoveCounter > MoveSpeed)
+	{
+	if (wnd.kbd.KeyIsPressed(0x41))
+	{
+		brd.MoveMazeInView({ -10,0 });
+	}
+	else if (wnd.kbd.KeyIsPressed(0x44))
+	{
+		brd.MoveMazeInView({ 10,0 });
+	}
+	else if (wnd.kbd.KeyIsPressed(0x57))
+	{
+		brd.MoveMazeInView({ 0,-10 });
+	}
+	else if (wnd.kbd.KeyIsPressed(0x53))
+	{
+		brd.MoveMazeInView({ 0,10 });
+	}
+}
+MoveCounter++;
 	if(count == FlashSpeedMax)
 	{
 		count = 0;
@@ -99,7 +118,7 @@ void Game::UpdateModel()
 
 
 	count++;
-	std::this_thread::sleep_for(std::chrono::milliseconds(200));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
 
 void Game::ComposeFrame()
