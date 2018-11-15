@@ -269,9 +269,28 @@ void Board::MoveBy(const Vei2& delta_loc)
 	
 }
 
-void Board::MoveMazeInView(const Vei2 & delta_loc)
+void Board::MoveMazeInView()
 {
-	MazeRect.moveRect(delta_loc);
+	Vei2 ScreenPos;
+	ScreenPos.x = CurrPos.x * dimension + MazeRect.left;
+	ScreenPos.y = CurrPos.y * dimension + MazeRect.top;
+
+	if (MazeRect.left < ScrRect.left && ScreenPos.x < ScrRect.left + int((ScrRect.right - ScrRect.left) * 0.2))
+	{
+		MazeRect.moveRect({ 100,0 });
+	}
+	else if (MazeRect.right > ScrRect.right && ScreenPos.x > ScrRect.left + int((ScrRect.right - ScrRect.left) * 0.8))
+	{
+		MazeRect.moveRect({ -100,0 });
+	}
+	else if (MazeRect.top < ScrRect.top && ScreenPos.y < ScrRect.top + int((ScrRect.bottom - ScrRect.top) * 0.2))
+	{
+		MazeRect.moveRect({ 0,100 });
+	}
+	else if (MazeRect.bottom > ScrRect.bottom && ScreenPos.y > ScrRect.top + int((ScrRect.bottom - ScrRect.top) * 0.8))
+	{
+		MazeRect.moveRect({ 0, -100 });
+	}
 }
 
 RectI Board::GetMazeRect()

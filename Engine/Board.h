@@ -58,7 +58,7 @@ public:
 	void SetNewCurrent(const Vei2& gridpos);
 	void SetEndPos(const Vei2& gridpos);
 	void MoveBy(const Vei2& delta_loc);
-	void MoveMazeInView(const Vei2& delta_loc);
+	void MoveMazeInView();
 	RectI GetScrRect();
 	RectI GetMazeRect();
 

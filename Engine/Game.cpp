@@ -56,7 +56,7 @@ void Game::UpdateModel()
 		std::random_device rd;
 		std::mt19937 rng(rd());
 		std::uniform_int_distribution<int> lowx(0, 4);
-		std::uniform_int_distribution<int> y(0, 24);
+		std::uniform_int_distribution<int> y(40, 49);
 		std::uniform_int_distribution<int> highx(31, 34);
 		brd.SetNewCurrent({ lowx(rng),y(rng) });
 		brd.SetEndPos({ highx(rng), y(rng) });
@@ -91,32 +91,13 @@ void Game::UpdateModel()
 		}
 	}
 
-	if (MoveCounter > MoveSpeed)
-	{
-	if (wnd.kbd.KeyIsPressed(0x41) && brd.GetMazeRect().left < brd.GetScrRect().left)
-	{
-		brd.MoveMazeInView({ 20,0 });
-	}
-	else if (wnd.kbd.KeyIsPressed(0x44) && brd.GetMazeRect().right > brd.GetScrRect().right)
-	{
-		brd.MoveMazeInView({ -20,0 });
-	}
-	else if (wnd.kbd.KeyIsPressed(0x57) && brd.GetMazeRect().top < brd.GetScrRect().top)
-	{
-		brd.MoveMazeInView({ 0,20 });
-	}
-	else if (wnd.kbd.KeyIsPressed(0x53) && brd.GetMazeRect().bottom > brd.GetScrRect().bottom)
-	{
-		brd.MoveMazeInView({ 0, -20 });
-	}
-}
-MoveCounter++;
+	MoveCounter++;
 	if(count == FlashSpeedMax)
 	{
 		count = 0;
 	}
 
-
+	brd.MoveMazeInView();
 	count++;
 	//std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
