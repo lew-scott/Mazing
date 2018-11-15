@@ -9,7 +9,8 @@ Board::Board(Graphics & gfx, const Vei2& CurrPos)
 	:
 	gfx(gfx),
 	CurrPos(CurrPos),
-	MazeRect({ offset + borderWidth,offset + borderWidth }, dimension * width, dimension * height)
+	MazeRect({ offset + borderWidth,offset + borderWidth }, dimension * width, dimension * height),
+	ScrRect({ offset + borderWidth,offset + borderWidth }, dimension * MazeWinx, dimension * MazeWiny)
 {
 }
 
@@ -23,11 +24,11 @@ void Board::DrawCells(Graphics& gfx)
 		for (gridpos.x = 0; gridpos.x < width; gridpos.x++)
 		{
 
-			 ScreenPos.x = gridpos.x * dimension + offset  + borderWidth;
-			 ScreenPos.y = gridpos.y * dimension + offset  + borderWidth;
+			 ScreenPos.x = gridpos.x * dimension + MazeRect.left;
+			 ScreenPos.y = gridpos.y * dimension + MazeRect.top;
 
-			 if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
-			 && ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom )
+			 if (ScreenPos.x >= ScrRect.left && ScreenPos.x < ScrRect.right
+			 && ScreenPos.y >= ScrRect.top && ScreenPos.y < ScrRect.bottom )
 			 {
 				 AtTile(gridpos).Draw(ScreenPos, gfx);
 			 }
@@ -42,27 +43,27 @@ void Board::DrawBorder()
 	//Outer boarder
 	const int top = offset;
 	const int left = offset;
-	const int bottom = top + borderWidth * 2 + height * dimension;
-	const int right = left + borderWidth * 2 + width * dimension;
+	const int bottom = top + borderWidth + 25 * dimension - 2;
+	const int right = left + borderWidth + 35 * dimension - 2;
 
 	// top
-	gfx.DrawRect( left,top,right,top + borderWidth, Colors::Blue);
+	gfx.DrawRect( left,top,right + borderWidth,top + borderWidth + 2, Colors::Blue);
 	// left
-	gfx.DrawRect( left,top + borderWidth,left + borderWidth,bottom - borderWidth, Colors::Blue);
+	gfx.DrawRect( left, top + borderWidth, left + borderWidth + 2, bottom, Colors::Blue);
 	// right
-	gfx.DrawRect( right - borderWidth,top + borderWidth,right,bottom - borderWidth, Colors::Blue);
+	gfx.DrawRect( right - 2, top + borderWidth, right + borderWidth, bottom, Colors::Blue);
 	// bottom
-	gfx.DrawRect( left,bottom - borderWidth,right,bottom, Colors::Blue);
+	gfx.DrawRect( left,bottom - 2,right + borderWidth,bottom + borderWidth+1, Colors::Blue);
 }
 
 void Board::DrawPosInMaze()
 {
 	Vei2 ScreenPos;
-	ScreenPos.x = CurrPos.x * dimension + offset + borderWidth + 3;
-	ScreenPos.y = CurrPos.y * dimension + offset + borderWidth + 3;
+	ScreenPos.x = CurrPos.x * dimension + MazeRect.left + 3;
+	ScreenPos.y = CurrPos.y * dimension + MazeRect.top + 3;
 
-	if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
-		&& ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom)
+	if (ScreenPos.x >= ScrRect.left && ScreenPos.x < ScrRect.right
+		&& ScreenPos.y >= ScrRect.top && ScreenPos.y < ScrRect.bottom)
 	{
 		gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::White);
 	}
@@ -71,11 +72,11 @@ void Board::DrawPosInMaze()
 void Board::DrawEndPos()
 {
 	Vei2 ScreenPos;
-	ScreenPos.x = EndPos.x * dimension + offset + borderWidth + 3;
-	ScreenPos.y = EndPos.y * dimension + offset + borderWidth + 3;
+	ScreenPos.x = EndPos.x * dimension + MazeRect.left + 3 ;
+	ScreenPos.y = EndPos.y * dimension + MazeRect.top + 3;
 
-	if (ScreenPos.x >= MazeRect.left && ScreenPos.x < MazeRect.right
-		&& ScreenPos.y >= MazeRect.top && ScreenPos.y < MazeRect.bottom)
+	if (ScreenPos.x >= ScrRect.left && ScreenPos.x < ScrRect.right
+		&& ScreenPos.y >= ScrRect.top && ScreenPos.y < ScrRect.bottom)
 	{
 		gfx.DrawRectDim(ScreenPos.x, ScreenPos.y, 14, 14, Colors::Red);
 	}
@@ -271,6 +272,16 @@ void Board::MoveBy(const Vei2& delta_loc)
 void Board::MoveMazeInView(const Vei2 & delta_loc)
 {
 	MazeRect.moveRect(delta_loc);
+}
+
+RectI Board::GetMazeRect()
+{
+	return MazeRect;
+}
+
+RectI Board::GetScrRect()
+{
+	return ScrRect;
 }
 
 

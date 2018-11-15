@@ -93,21 +93,21 @@ void Game::UpdateModel()
 
 	if (MoveCounter > MoveSpeed)
 	{
-	if (wnd.kbd.KeyIsPressed(0x41))
+	if (wnd.kbd.KeyIsPressed(0x41) && brd.GetMazeRect().left < brd.GetScrRect().left)
 	{
-		brd.MoveMazeInView({ -10,0 });
+		brd.MoveMazeInView({ 20,0 });
 	}
-	else if (wnd.kbd.KeyIsPressed(0x44))
+	else if (wnd.kbd.KeyIsPressed(0x44) && brd.GetMazeRect().right > brd.GetScrRect().right)
 	{
-		brd.MoveMazeInView({ 10,0 });
+		brd.MoveMazeInView({ -20,0 });
 	}
-	else if (wnd.kbd.KeyIsPressed(0x57))
+	else if (wnd.kbd.KeyIsPressed(0x57) && brd.GetMazeRect().top < brd.GetScrRect().top)
 	{
-		brd.MoveMazeInView({ 0,-10 });
+		brd.MoveMazeInView({ 0,20 });
 	}
-	else if (wnd.kbd.KeyIsPressed(0x53))
+	else if (wnd.kbd.KeyIsPressed(0x53) && brd.GetMazeRect().bottom > brd.GetScrRect().bottom)
 	{
-		brd.MoveMazeInView({ 0,10 });
+		brd.MoveMazeInView({ 0, -20 });
 	}
 }
 MoveCounter++;
@@ -123,7 +123,7 @@ MoveCounter++;
 
 void Game::ComposeFrame()
 {
-	brd.DrawBorder();
+	
 	brd.DrawCells(gfx);
 	brd.DrawEndPos();
 	if (count < FlashSpeed)
@@ -131,6 +131,6 @@ void Game::ComposeFrame()
 		brd.DrawPosInMaze();
 	}
 	
-
+	brd.DrawBorder();
 
 }

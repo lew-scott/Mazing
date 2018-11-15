@@ -59,6 +59,8 @@ public:
 	void SetEndPos(const Vei2& gridpos);
 	void MoveBy(const Vei2& delta_loc);
 	void MoveMazeInView(const Vei2& delta_loc);
+	RectI GetScrRect();
+	RectI GetMazeRect();
 
 private:
 	Tile& AtTile(const Vei2& gridpos);
@@ -66,11 +68,14 @@ private:
 
 private:
 	static constexpr int dimension = 20;
-	static constexpr int width = 35;
-	static constexpr int height = 25;
+	static constexpr int width = 65;
+	static constexpr int height = 50;
 	static constexpr int borderWidth = 4;
 	static constexpr int offset = 40;
+	static constexpr int MazeWinx = 35;
+	static constexpr int MazeWiny = 25;
 	RectI MazeRect;
+	RectI ScrRect;
 	Vei2 CurrPos;
 	Vei2 EndPos;
 	Tile grid[width * height];
