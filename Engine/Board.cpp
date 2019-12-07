@@ -38,7 +38,7 @@ void Board::DrawCells(Graphics& gfx)
 }
 
 
-void Board::DrawBorder()
+void Board::DrawBorder() // issue with border found
 {
 	//Outer boarder
 	const int top = offset;
